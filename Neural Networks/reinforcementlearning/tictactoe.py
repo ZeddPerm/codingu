@@ -36,7 +36,6 @@ def resultOfGame(gs):
         return gs[0][0]
     if '' not in gs[0] and '' not in gs[1] and '' not in gs[2]:
         return 'draw'
-    print('not done')
     return 'not done'
 # print('a',resultOfGame([['', '', 'x'], ['', '', 'x'], ['', 'x', '']]))
 def bestPossibleMove(gs,cur_player):
@@ -88,11 +87,12 @@ value_of_gamestate = {}
 #                         ['x','o','o']], 'o'))
 results = 0
 player = players[random.randint(0,1)]
-while results != 10:
+learning_rate = 0.2
+while results != 'not done':
     move = bestPossibleMove(gamestate,player)
     gamestate[move[0]][move[1]] = player
-    results += 1
-    print(resultOfGame(gamestate))
+    results = resultOfGame(gamestate)
+    
     if player == 'x':
         player = 'o'
     elif player == 'o':
