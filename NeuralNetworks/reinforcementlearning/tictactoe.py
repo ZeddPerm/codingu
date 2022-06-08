@@ -119,7 +119,7 @@ for i in range(1000):
             new_o_state = aiO[all_gamestates.index(gamestate)]
             o_state += learning_rate*(new_o_state - o_state)
             aiO[all_gamestates.index(o_state_gs)] = o_state
-            # print(aiO[all_gamestates.index(gamestate)])
+            # print(aiO[all_gamestates.index(o_state_gs)])
             player = 'x'
         # print('g',gamestate)
         # print('r',results)
