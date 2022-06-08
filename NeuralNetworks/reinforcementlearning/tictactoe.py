@@ -98,18 +98,18 @@ for i in range(1000):
     learning_rate = 0.2
     while results == 'not done':
         if player == 'x':
-            x_state = aiX[all_gamestates.index(gamestate)]
+            x_state = all_gamestates.index(gamestate)
             # print(aiX[all_gamestates.index(gamestate)])
             x_state_gs = copy.deepcopy(gamestate)
             move = bestPossibleMove(gamestate,player)
             gamestate[move[0]][move[1]] = player
             _,results = resultOfGame(gamestate)
-            new_x_state = aiX[all_gamestates.index(gamestate)]
-            x_state += learning_rate*(new_x_state - x_state)
-            aiX[all_gamestates.index(x_state_gs)] = x_state
+            new_x_state = all_gamestates.index(gamestate)
+            aiX[x_state] += learning_rate*(aiX[new_x_state] - aiX[x_state])
+            aiX[all_gamestates.index(x_state_gs)] = aiX[x_state]
             player = 'o'
-            if x_state != 0.2 and x_state != 0.0 and x_state != 1.0:
-                print(aiX[all_gamestates.index(x_state_gs)])
+            if aiX[x_state] != 0.2 and aiX[x_state] != 0.0 and aiX[x_state] != 1.0:
+                print(aiX[all_gamestates.index(x_state_gs)], all_gamestates.index(x_state_gs))
                 print('x',aiX)
                 time.sleep(5)
         elif player == 'o':
