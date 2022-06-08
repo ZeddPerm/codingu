@@ -108,7 +108,10 @@ for i in range(1000):
             x_state += learning_rate*(new_x_state - x_state)
             aiX[all_gamestates.index(x_state_gs)] = x_state
             player = 'o'
-            # print(aiX[all_gamestates.index(x_state_gs)])
+            if x_state != 0.2 and x_state != 0.0 and x_state != 1.0:
+                print(aiX[all_gamestates.index(x_state_gs)])
+                print('x',aiX)
+                time.sleep(5)
         elif player == 'o':
             o_state = aiO[all_gamestates.index(gamestate)]
             # print(aiO[all_gamestates.index(gamestate)])
@@ -119,7 +122,10 @@ for i in range(1000):
             new_o_state = aiO[all_gamestates.index(gamestate)]
             o_state += learning_rate*(new_o_state - o_state)
             aiO[all_gamestates.index(o_state_gs)] = o_state
-            # print(aiO[all_gamestates.index(o_state_gs)])
+            if o_state != 0.2 and o_state != 0.0 and o_state != 1.0:
+                print(aiO[all_gamestates.index(o_state_gs)])
+                print('o',aiO)
+                time.sleep(5)
             player = 'x'
         # print('g',gamestate)
         # print('r',results)
