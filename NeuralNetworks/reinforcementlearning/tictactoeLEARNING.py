@@ -48,8 +48,6 @@ def bestPossibleMove(gs,cur_player):
                 temp_gs = copy.deepcopy(gs)
                 temp_gs[i][j] = cur_player
                 open_spaces.append([i,j])
-                # print(temp_gs)
-                # print(gs)
                 if temp_gs in all_gamestates:
                     if cur_player == 'x':
                         possible_values.append(aiX[all_gamestates.index(temp_gs)])
@@ -59,7 +57,7 @@ def bestPossibleMove(gs,cur_player):
     if v > epsilon:
         return open_spaces[np.argmax(possible_values)]
     else:
-        epsilon -= 0.01
+        epsilon = epsilon * 0.999
         return open_spaces[random.randint(0,len(open_spaces)-1)]
     # return open_spaces
 
@@ -87,9 +85,9 @@ value_of_gamestate = {}
 results = 0
 player = players[random.randint(0,1)]
 learning_rate = 0.2
-aiX = np.loadtxt("aiX.txt", dtype=np.float64)
-aiO = np.loadtxt("aiO.txt", dtype=np.float64)
-for i in range(10000):
+# aiX = np.loadtxt("aiX.txt", dtype=np.float64)
+# aiO = np.loadtxt("aiO.txt", dtype=np.float64)
+for i in range(5000):
     gamestate = [['','',''],
                 ['','',''],
                 ['','','']]
@@ -97,40 +95,23 @@ for i in range(10000):
     player = players[random.randint(0,1)]
     learning_rate = 0.2
     while results == 'not done':
+        state = all_gamestates.index(gamestate)
+        move = bestPossibleMove(gamestate,player)
+        gamestate[move[0]][move[1]] = player
+        _,results = resultOfGame(gamestate)
+        new_state = all_gamestates.index(gamestate)
+        value_of_x_state = learning_rate*(aiX[new_state] - aiX[state]) + aiX[state]
+        aiX[state] = value_of_x_state
+        value_of_o_state = learning_rate*(aiO[new_state] - aiO[state]) + aiO[state]
+        aiO[state] = value_of_o_state
         if player == 'x':
-            x_state = all_gamestates.index(gamestate)
-            # print(aiX[x_state])
-            move = bestPossibleMove(gamestate,player)
-            gamestate[move[0]][move[1]] = player
-            _,results = resultOfGame(gamestate)
-            new_x_state = all_gamestates.index(gamestate)
-            value_of_x_state = learning_rate*(aiX[new_x_state] - aiX[x_state]) + aiX[x_state]
-            aiX[x_state] = value_of_x_state
-            # print(aiX[x_state])
             player = 'o'
-            # if aiX[x_state] != 0.2 and aiX[x_state] != 0.0 and aiX[x_state] != 1.0:
-            #     print(aiX[x_state], x_state)
-            #     print('x',aiX)
-            #     time.sleep(5)
         elif player == 'o':
-            o_state = all_gamestates.index(gamestate)
-            # print(aiO[o_state])
-            move = bestPossibleMove(gamestate,player)
-            gamestate[move[0]][move[1]] = player
-            _,results = resultOfGame(gamestate)
-            new_o_state = all_gamestates.index(gamestate)
-            value_of_o_state = learning_rate*(aiO[new_o_state] - aiO[o_state]) + aiO[o_state]
-            aiO[o_state] = value_of_o_state
-            # print(aiO[o_state])
             player = 'x'
-            # if o_state != 0.2 and o_state != 0.0 and o_state != 1.0:
-            #     print(aiO[all_gamestates.index(o_state_gs)])
-            #     print('o',aiO)
-            #     time.sleep(5)
         # print('g',gamestate)
         # print('r',results)
 np.savetxt("aiX.txt", aiX, fmt="%.4f")
-np.savetxt("aiX.txt", aiO, fmt="%.4f")
+np.savetxt("aiO.txt", aiO, fmt="%.4f")
 # with open("aiX.txt", "w") as x:
 #     for i in aiX:
 #         x.write(str(i) + "\n")

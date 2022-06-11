@@ -28,6 +28,7 @@ def resultOfGame(gs):
 def bestPossibleMove(gs,cur_player):
     open_spaces = []
     possible_values = []
+    print(all_gamestates.index(gs),gs)
     for i in range(len(gs)):
         for j in range(len(gs[i])):
             if gs[i][j] == '':
@@ -41,7 +42,9 @@ def bestPossibleMove(gs,cur_player):
                         # possible_values.append(aiX[all_gamestates.index(temp_gs)])
                     if cur_player == 'o':
                         possible_values.append(aiO[all_gamestates.index(temp_gs)])
-    print(possible_values,open_spaces)
+                        print(all_gamestates.index(temp_gs),temp_gs,aiO[all_gamestates.index(temp_gs)])
+    print(possible_values,open_spaces[np.argmax(possible_values)])
+    return open_spaces[np.argmax(possible_values)]
     # return open_spaces
 
 states = ['','x','o']
@@ -67,11 +70,12 @@ while result == 'not done':
     if player == 'x':
         x_coord = int(input("Choose the X coordinate for your shape: "))
         y_coord = int(input("Choose the Y coordinate for your shape: "))
-        gamestate[y_coord][x_coord] = player
-        _,result = resultOfGame(gamestate)
-        player = 'o'
+        if gamestate[y_coord][x_coord] == '':
+            gamestate[y_coord][x_coord] = player
+            _,result = resultOfGame(gamestate)
+            player = 'o'
     elif player == 'o':
-        best_o_move = bestPossibleMove(gamestate,)
-        gamestate[y_coord][x_coord] = player
+        best_o_move = bestPossibleMove(gamestate,'o')
+        gamestate[best_o_move[0]][best_o_move[1]] = player
         _,result = resultOfGame(gamestate)
         player = 'x'
